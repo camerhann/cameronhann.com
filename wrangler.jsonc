@@ -1,0 +1,11 @@
+{
+  "name": "cameronhann",
+  "compatibility_date": "2026-08-19",
+  "assets": {
+    "directory": "./dist"
+  },
+  "routes": [
+    { "pattern": "cameronhann.com", "custom_domain": true },
+    { "pattern": "www.cameronhann.com", "custom_domain": true }
+  ]
+}

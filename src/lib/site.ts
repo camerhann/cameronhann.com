@@ -2,7 +2,7 @@ export const site = {
   name: 'Chris Cameron-Hann',
   url: 'https://cameronhann.com',
   description:
-    'CTO at Aegaea and 7Analytics. I build models, I build software, I build teams.',
+    'Personal site of Chris Cameron-Hann. Writing on flood models, software, insurance, and whatever else is interesting.',
   handle: '@cameronhann',
   x: 'https://x.com/cameronhann',
   linkedin: 'https://www.linkedin.com/in/chris-cameron-hann/',

@@ -10,7 +10,7 @@ const posts = (await getCollection('writing', ({ data }) => !data.draft)).sort(
 
 <Base title="Writing" description="Long-form notes on flood models, software, and building teams.">
   <h1>Writing</h1>
-  <p class="lede">Long form. If it is any good, a short version goes on X.</p>
+  <p class="lede">Long form on the work, and anything else I want to get straight. Short versions go on X.</p>
 
   {
     posts.length === 0 ? (

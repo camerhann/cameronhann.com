@@ -1,17 +1,17 @@
 # cameronhann.com
 
-Personal site for Chris Cameron-Hann. Long essays here. Short versions on X.
+Personal site. Writing on the work, and other things. Not a company blog.
 
 ```
 npm install
 npm run dev
-npm run build
+npm run deploy
 ```
 
-Write in `src/content/writing/*.md`. Draft an X post without posting:
+Write in `src/content/writing/*.md`. Draft an X post (does not send):
 
 ```
-node scripts/draft-x.mjs i-build-models-software-teams
+npm run x-draft -- i-build-models-software-teams
 ```
 
-Do not resurrect `camerhann.github.io`. That was Aegaea SEO, not this.
+Hosted on Cloudflare (the zone already on this domain). Do not resurrect `camerhann.github.io`.
