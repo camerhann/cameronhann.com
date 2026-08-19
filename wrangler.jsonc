@@ -1,11 +1,31 @@
 {
+  "$schema": "node_modules/wrangler/config-schema.json",
+  "main": ".open-next/worker.js",
   "name": "cameronhann",
-  "compatibility_date": "2026-08-19",
+  "compatibility_date": "2026-08-15",
+  "compatibility_flags": [
+    "global_fetch_strictly_public"
+  ],
   "assets": {
-    "directory": "./dist"
+    "directory": ".open-next/assets",
+    "binding": "ASSETS"
   },
-  "routes": [
-    { "pattern": "cameronhann.com", "custom_domain": true },
-    { "pattern": "www.cameronhann.com", "custom_domain": true }
-  ]
+  "services": [
+    {
+      "binding": "WORKER_SELF_REFERENCE",
+      "service": "cameronhann"
+    }
+  ],
+  "r2_buckets": [
+    {
+      "binding": "NEXT_INC_CACHE_R2_BUCKET",
+      "bucket_name": "tailwind-plus-template-opennext-cache"
+    }
+  ],
+  "images": {
+    "binding": "IMAGES"
+  },
+  "observability": {
+    "enabled": true
+  }
 }

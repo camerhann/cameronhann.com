@@ -1,5 +1,7 @@
 # build output
 dist/
+.next/
+.open-next/
 # generated types
 .astro/
 
@@ -25,3 +27,9 @@ pnpm-debug.log*
 
 .vercel/
 .wrangler/
+spotlight.zip
+.env*.local
+
+.dev.vars*
+!.dev.vars.example
+!.env.example
