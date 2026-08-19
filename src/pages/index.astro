@@ -1,0 +1,46 @@
+---
+import Base from '../layouts/Base.astro';
+import { getCollection } from 'astro:content';
+import { formatDate } from '../lib/site';
+
+const posts = (await getCollection('writing', ({ data }) => !data.draft)).sort(
+  (a, b) => b.data.date.valueOf() - a.data.date.valueOf(),
+);
+---
+
+<Base>
+  <h1>Chris Cameron-Hann</h1>
+  <p class="lede">
+    CTO at Aegaea and 7Analytics. I build <a href="https://hydrometric.io">hydrometric.io</a>.
+  </p>
+  <p>
+    I build models. I build software. I build teams. Flood risk, insurance, hydrology — the interesting
+    work sits where those three meet.
+  </p>
+  <p class="muted">
+    Long essays live here. Short versions go to X.
+  </p>
+
+  <hr class="rule" />
+
+  <h2 class="section-label">Writing</h2>
+  {
+    posts.length === 0 ? (
+      <p class="muted">Nothing published yet.</p>
+    ) : (
+      <ul class="writing-list">
+        {posts.map((post) => (
+          <li>
+            <a href={`/writing/${post.id}`}>
+              <span class="writing-title">{post.data.title}</span>
+              <span class="writing-meta">
+                <time datetime={post.data.date.toISOString()}>{formatDate(post.data.date)}</time>
+              </span>
+              <span class="writing-dek">{post.data.description}</span>
+            </a>
+          </li>
+        ))}
+      </ul>
+    )
+  }
+</Base>
