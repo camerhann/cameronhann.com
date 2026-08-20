@@ -16,16 +16,14 @@
       "service": "cameronhann"
     }
   ],
-  "r2_buckets": [
-    {
-      "binding": "NEXT_INC_CACHE_R2_BUCKET",
-      "bucket_name": "tailwind-plus-template-opennext-cache"
-    }
-  ],
   "images": {
     "binding": "IMAGES"
   },
   "observability": {
     "enabled": true
-  }
+  },
+  "routes": [
+    { "pattern": "cameronhann.com/*", "zone_name": "cameronhann.com" },
+    { "pattern": "www.cameronhann.com/*", "zone_name": "cameronhann.com" }
+  ]
 }
