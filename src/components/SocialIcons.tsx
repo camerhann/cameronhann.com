@@ -1,3 +1,11 @@
+export function ForecastIcon(props: React.ComponentPropsWithoutRef<'svg'>) {
+  return (
+    <svg viewBox="0 0 24 24" aria-hidden="true" {...props}>
+      <path d="M12 2.5s6.25 7.4 6.25 11.25a6.25 6.25 0 1 1-12.5 0C5.75 9.9 12 2.5 12 2.5Z" />
+    </svg>
+  )
+}
+
 export function XIcon(props: React.ComponentPropsWithoutRef<'svg'>) {
   return (
     <svg viewBox="0 0 24 24" aria-hidden="true" {...props}>

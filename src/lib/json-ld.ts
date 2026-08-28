@@ -1,4 +1,4 @@
-import { person, sameAs, siteUrl, social } from '@/lib/site'
+import { person, sameAs, siteUrl, social, works } from '@/lib/site'
 
 export function personGraph() {
   const imageUrl = `${siteUrl}${person.imagePath}`
@@ -70,6 +70,18 @@ export function personGraph() {
             value: 'chris-cameron-hann',
           },
         ],
+      },
+      {
+        '@type': 'SoftwareApplication',
+        '@id': `${works.forecast.href}/#app`,
+        name: 'River flood outlook',
+        url: works.forecast.href,
+        applicationCategory: 'WeatherApplication',
+        operatingSystem: 'Web',
+        description:
+          'Live flood flow predictions for England and Wales based on forecast rainfall. Experimental. Not a flood warning service.',
+        creator: { '@id': `${siteUrl}/#person` },
+        author: { '@id': `${siteUrl}/#person` },
       },
     ],
   }

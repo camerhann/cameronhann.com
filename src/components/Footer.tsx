@@ -1,7 +1,7 @@
 import Link from 'next/link'
 
 import { ContainerInner, ContainerOuter } from '@/components/Container'
-import { social } from '@/lib/site'
+import { social, works } from '@/lib/site'
 
 function NavLink({
   href,
@@ -31,6 +31,12 @@ export function Footer() {
                 <NavLink href="/about">About</NavLink>
                 <NavLink href="/articles">Writing</NavLink>
                 <NavLink href="/projects">Work</NavLink>
+                <a
+                  href={works.forecast.href}
+                  className="transition hover:text-teal-500 dark:hover:text-teal-400"
+                >
+                  Forecast
+                </a>
                 <a
                   href={social.x.href}
                   rel="me"

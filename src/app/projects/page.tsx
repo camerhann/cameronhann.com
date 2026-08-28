@@ -5,10 +5,19 @@ import { Card } from '@/components/Card'
 import { SimpleLayout } from '@/components/SimpleLayout'
 import logo7analytics from '@/images/logos/7analytics.svg'
 import logoAegaea from '@/images/logos/aegaea.svg'
+import logoForecast from '@/images/logos/forecast.svg'
 import logoHydrometric from '@/images/logos/hydrometric.svg'
 import logoWorldBank from '@/images/logos/world-bank.svg'
+import { works } from '@/lib/site'
 
 const projects = [
+  {
+    name: works.forecast.name,
+    description:
+      'Live flood flow predictions for England and Wales, from forecast rainfall. Experimental river-flow outlook — not a flood warning service.',
+    link: { href: works.forecast.href, label: works.forecast.label },
+    logo: logoForecast,
+  },
   {
     name: 'Aegaea',
     description:
@@ -56,7 +65,7 @@ function LinkIcon(props: React.ComponentPropsWithoutRef<'svg'>) {
 export const metadata: Metadata = {
   title: 'Work',
   description:
-    'Aegaea, 7Analytics, World Bank hydrometeorology advice, and Hydrometric. The companies are how the work ships.',
+    'Live flood flow predictions at forecast.cameronhann.com, plus Aegaea, 7Analytics, World Bank hydrometeorology advice, and Hydrometric.',
   alternates: { canonical: '/projects' },
 }
 

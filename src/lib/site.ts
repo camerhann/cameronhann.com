@@ -6,9 +6,10 @@ export const person = {
   givenName: 'Chris',
   familyName: 'Cameron-Hann',
   alternateNames: ['Christopher Cameron-Hann', 'camerhann'] as const,
-  jobTitle: 'Flood hydrologist',
+  jobTitle: 'Hydrologist',
+  tagline: 'CTO, Hydrologist, Flood Modeller, Data Junky, AI nerd',
   description:
-    'Flood hydrologist. Founder and CTO of Aegaea, CTO at 7Analytics, and a World Bank hydrometeorology adviser. I build flood models, software, and teams.',
+    'CTO, hydrologist, flood modeller. Founder of Aegaea, CTO at 7Analytics, World Bank hydrometeorology adviser. Live flood flow predictions from forecast rainfall at forecast.cameronhann.com.',
   imagePath: '/images/chris-cameron-hann.jpg',
 }
 
@@ -35,3 +36,11 @@ export const sameAs = [
   social.github.href,
   'https://aegaea.com/about-us/team/christopher-cameron-hann/',
 ] as const
+
+export const works = {
+  forecast: {
+    href: 'https://forecast.cameronhann.com',
+    label: 'forecast.cameronhann.com',
+    name: 'Forecast',
+  },
+} as const

@@ -5,27 +5,34 @@ import clsx from 'clsx'
 
 import { Container } from '@/components/Container'
 import { JsonLd } from '@/components/JsonLd'
-import { GitHubIcon, LinkedInIcon, XIcon } from '@/components/SocialIcons'
+import {
+  ForecastIcon,
+  GitHubIcon,
+  LinkedInIcon,
+  XIcon,
+} from '@/components/SocialIcons'
 import portraitImage from '@/images/portrait.jpg'
 import { profilePageGraph } from '@/lib/json-ld'
-import { person, social } from '@/lib/site'
+import { person, social, works } from '@/lib/site'
 
 function SocialLink({
   className,
   href,
   children,
   icon: Icon,
+  rel,
 }: {
   className?: string
   href: string
   icon: React.ComponentType<{ className?: string }>
   children: React.ReactNode
+  rel?: string
 }) {
   return (
     <li className={clsx(className, 'flex')}>
       <Link
         href={href}
-        rel="me"
+        rel={rel}
         className="group flex text-sm font-medium text-zinc-800 transition hover:text-teal-500 dark:text-zinc-200 dark:hover:text-teal-500"
       >
         <Icon className="h-6 w-6 flex-none fill-zinc-500 transition group-hover:fill-teal-500" />
@@ -38,13 +45,13 @@ function SocialLink({
 export const metadata: Metadata = {
   title: 'About',
   description:
-    'Chris Cameron-Hann is a flood hydrologist. Founder and CTO of Aegaea, CTO at 7Analytics, World Bank hydrometeorology adviser. MSci Geographical Science, University of Bristol.',
+    'Chris Cameron-Hann — CTO, hydrologist, flood modeller. Founder of Aegaea, CTO at 7Analytics, World Bank hydrometeorology adviser. Live flood flow predictions at forecast.cameronhann.com.',
   alternates: { canonical: '/about' },
   openGraph: {
     type: 'profile',
     title: 'About Chris Cameron-Hann',
     description:
-      'Flood hydrologist. Founder and CTO of Aegaea, CTO at 7Analytics, World Bank hydrometeorology adviser.',
+      'CTO, hydrologist, flood modeller. Founder of Aegaea, CTO at 7Analytics. Live flood flow predictions at forecast.cameronhann.com.',
   },
 }
 
@@ -85,8 +92,11 @@ export default function About() {
           </div>
           <div className="lg:order-first lg:row-span-2">
             <h1 className="text-4xl font-bold tracking-tight text-zinc-800 sm:text-5xl dark:text-zinc-100">
-              I’m Chris Cameron-Hann. Flood hydrologist.
+              I’m Chris Cameron-Hann.
             </h1>
+            <p className="mt-4 text-lg text-zinc-600 dark:text-zinc-400">
+              {person.tagline}
+            </p>
             <div className="mt-6 space-y-7 text-base text-zinc-600 dark:text-zinc-400">
               <p>
                 Flood risk is sold as a map. It isn’t. It is a claim about how
@@ -97,9 +107,16 @@ export default function About() {
                 I founded Aegaea in 2012 and I am CTO there. I am also CTO at
                 7Analytics, building flood data for insurers at building scale.
                 I advise the World Bank on hydrometeorology and flood
-                forecasting. On the side I am building Hydrometric — the FEH
-                statistical pathway without the 2003 desktop and the Excel
-                round-trip.
+                forecasting. Live flood flow predictions from forecast rainfall
+                are at{' '}
+                <a
+                  href={works.forecast.href}
+                  className="text-teal-500 transition hover:text-teal-600"
+                >
+                  {works.forecast.label}
+                </a>
+                . On the side I am building Hydrometric — the FEH statistical
+                pathway without the 2003 desktop and the Excel round-trip.
               </p>
               <p>
                 This site is me, not a company. Long essays live here. Short
@@ -122,6 +139,17 @@ export default function About() {
                   Hydrometric is the UK statistical pathway in the browser:
                   catchment, pooling, forks, Method Space, and a report that
                   keeps its working.
+                </p>
+                <p>
+                  <a
+                    href={works.forecast.href}
+                    className="text-teal-500 transition hover:text-teal-600"
+                  >
+                    {works.forecast.label}
+                  </a>{' '}
+                  is a live river-flow outlook for England and Wales: which
+                  rivers the next five days of rain could push above their own
+                  flood levels. Experimental. Not a flood warning service.
                 </p>
               </AboutSection>
               <AboutSection title="World Bank">
@@ -171,13 +199,22 @@ export default function About() {
           </div>
           <div className="lg:pl-20">
             <ul role="list">
-              <SocialLink href={social.x.href} icon={XIcon}>
+              <SocialLink href={works.forecast.href} icon={ForecastIcon}>
+                Live flood forecast
+              </SocialLink>
+              <SocialLink
+                href={social.x.href}
+                icon={XIcon}
+                className="mt-4"
+                rel="me"
+              >
                 Follow {social.x.handle} on X
               </SocialLink>
               <SocialLink
                 href={social.github.href}
                 icon={GitHubIcon}
                 className="mt-4"
+                rel="me"
               >
                 Follow on GitHub
               </SocialLink>
@@ -185,6 +222,7 @@ export default function About() {
                 href={social.linkedin.href}
                 icon={LinkedInIcon}
                 className="mt-4"
+                rel="me"
               >
                 Follow on LinkedIn
               </SocialLink>

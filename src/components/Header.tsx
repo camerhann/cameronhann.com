@@ -15,6 +15,7 @@ import clsx from 'clsx'
 
 import { Container } from '@/components/Container'
 import avatarImage from '@/images/avatar.jpg'
+import { works } from '@/lib/site'
 
 function CloseIcon(props: React.ComponentPropsWithoutRef<'svg'>) {
   return (
@@ -124,6 +125,7 @@ function MobileNavigation(
             <MobileNavItem href="/about">About</MobileNavItem>
             <MobileNavItem href="/articles">Writing</MobileNavItem>
             <MobileNavItem href="/projects">Work</MobileNavItem>
+            <MobileNavItem href={works.forecast.href}>Forecast</MobileNavItem>
           </ul>
         </nav>
       </PopoverPanel>
@@ -167,6 +169,7 @@ function DesktopNavigation(props: React.ComponentPropsWithoutRef<'nav'>) {
         <NavItem href="/about">About</NavItem>
         <NavItem href="/articles">Writing</NavItem>
         <NavItem href="/projects">Work</NavItem>
+        <NavItem href={works.forecast.href}>Forecast</NavItem>
       </ul>
     </nav>
   )

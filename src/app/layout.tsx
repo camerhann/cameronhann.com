@@ -12,7 +12,7 @@ export const metadata: Metadata = {
   metadataBase: new URL(siteUrl),
   title: {
     template: '%s - Chris Cameron-Hann',
-    default: 'Chris Cameron-Hann — flood hydrologist',
+    default: 'Chris Cameron-Hann',
   },
   description: person.description,
   authors: [{ name: person.name, url: siteUrl }],
@@ -28,7 +28,7 @@ export const metadata: Metadata = {
     locale: 'en_GB',
     url: siteUrl,
     siteName: person.name,
-    title: 'Chris Cameron-Hann — flood hydrologist',
+    title: 'Chris Cameron-Hann',
     description: person.description,
     images: [
       {
@@ -46,7 +46,7 @@ export const metadata: Metadata = {
     card: 'summary_large_image',
     site: social.x.handle,
     creator: social.x.handle,
-    title: 'Chris Cameron-Hann — flood hydrologist',
+    title: 'Chris Cameron-Hann',
     description: person.description,
   },
 }

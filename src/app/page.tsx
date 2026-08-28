@@ -7,7 +7,7 @@ import { GitHubIcon, LinkedInIcon, XIcon } from '@/components/SocialIcons'
 import { XFeed } from '@/components/XFeed'
 import { type ArticleWithSlug, getAllArticles } from '@/lib/articles'
 import { formatDate } from '@/lib/formatDate'
-import { social } from '@/lib/site'
+import { person, social, works } from '@/lib/site'
 
 function Article({ article }: { article: ArticleWithSlug }) {
   return (
@@ -45,12 +45,22 @@ export default async function Home() {
       <Container className="mt-9">
         <div className="max-w-2xl">
           <h1 className="text-4xl font-bold tracking-tight text-zinc-800 sm:text-5xl dark:text-zinc-100">
-            I’m Chris Cameron-Hann. I build flood models, software, and teams.
+            I’m Chris Cameron-Hann.
           </h1>
+          <p className="mt-4 text-lg text-zinc-600 dark:text-zinc-400">
+            {person.tagline}
+          </p>
           <p className="mt-6 text-base text-zinc-600 dark:text-zinc-400">
-            Flood hydrologist. Founder and CTO of Aegaea, CTO at 7Analytics, and
-            a hydrometeorology adviser to the World Bank. This site is the long
-            form. The short version goes on X.
+            Founder and CTO of Aegaea, CTO at 7Analytics, hydrometeorology
+            adviser to the World Bank. Live flood flow predictions from forecast
+            rainfall:{' '}
+            <Link
+              href={works.forecast.href}
+              className="font-medium text-teal-500 transition hover:text-teal-600"
+            >
+              {works.forecast.label}
+            </Link>
+            . This site is the long form. The short version goes on X.
           </p>
           <div className="mt-6 flex gap-6">
             <SocialLink
