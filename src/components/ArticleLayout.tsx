@@ -1,13 +1,19 @@
 'use client'
 
 import { useContext } from 'react'
-import { useRouter } from 'next/navigation'
+import Link from 'next/link'
+import { usePathname, useRouter } from 'next/navigation'
 
 import { AppContext } from '@/app/providers'
 import { Container } from '@/components/Container'
+import { JsonLd } from '@/components/JsonLd'
 import { Prose } from '@/components/Prose'
 import { type ArticleWithSlug } from '@/lib/articles'
 import { formatDate } from '@/lib/formatDate'
+import { articleGraph } from '@/lib/json-ld'
+import { person } from '@/lib/site'
+
+type ArticleMeta = Omit<ArticleWithSlug, 'slug'> & { slug?: string }
 
 function ArrowLeftIcon(props: React.ComponentPropsWithoutRef<'svg'>) {
   return (
@@ -26,14 +32,24 @@ export function ArticleLayout({
   article,
   children,
 }: {
-  article: ArticleWithSlug
+  article: ArticleMeta
   children: React.ReactNode
 }) {
   let router = useRouter()
+  let pathname = usePathname()
   let { previousPathname } = useContext(AppContext)
 
   return (
     <Container className="mt-16 lg:mt-32">
+      <JsonLd
+        data={articleGraph({
+          title: article.title,
+          description: article.description,
+          date: article.date,
+          path: pathname,
+          image: article.image,
+        })}
+      />
       <div className="xl:relative">
         <div className="mx-auto max-w-2xl">
           {previousPathname && (
@@ -51,6 +67,15 @@ export function ArticleLayout({
               <h1 className="mt-6 text-4xl font-bold tracking-tight text-zinc-800 sm:text-5xl dark:text-zinc-100">
                 {article.title}
               </h1>
+              <p className="mt-4 text-sm text-zinc-500 dark:text-zinc-400">
+                <Link
+                  href="/about"
+                  rel="author"
+                  className="hover:text-teal-500"
+                >
+                  {person.name}
+                </Link>
+              </p>
               <time
                 dateTime={article.date}
                 className="order-first flex items-center text-base text-zinc-400 dark:text-zinc-500"

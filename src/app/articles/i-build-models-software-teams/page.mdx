@@ -11,6 +11,19 @@ export const article = {
 export const metadata = {
   title: article.title,
   description: article.description,
+  authors: [
+    { name: 'Chris Cameron-Hann', url: 'https://cameronhann.com/about' },
+  ],
+  alternates: { canonical: '/articles/i-build-models-software-teams' },
+  openGraph: {
+    type: 'article',
+    publishedTime: article.date,
+    authors: ['Chris Cameron-Hann'],
+  },
+  twitter: {
+    card: 'summary_large_image',
+    creator: '@camerhann',
+  },
 }
 
 export default (props) => <ArticleLayout article={article} {...props} />
@@ -27,7 +40,7 @@ I spend my time on all three. Most people pick one.
 
 The software is how the model becomes a system.
 
-**Teams.** None of this holds if one person *is* the model. I have built Aegaea so it can issue without me in the loop. Same problem in software: if the method lives in my head, it is not a method. System design is the work of making other people faster than I am.
+**Teams.** None of this holds if one person _is_ the model. I have built Aegaea so it can issue without me in the loop. Same problem in software: if the method lives in my head, it is not a method. System design is the work of making other people faster than I am.
 
 I do not think of these as three jobs. A model no one can run is a paper. Software with no model is a wrapper. A team with neither is a billing machine. The interesting work is the joint.
 

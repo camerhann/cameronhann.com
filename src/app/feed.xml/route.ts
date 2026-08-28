@@ -11,6 +11,7 @@ export async function GET(req: Request) {
 
   let author = {
     name: 'Chris Cameron-Hann',
+    link: siteUrl,
   }
 
   let feed = new Feed({

@@ -37,7 +37,8 @@ function Article({ article }: { article: ArticleWithSlug }) {
 export const metadata: Metadata = {
   title: 'Writing',
   description:
-    'Long form on the work, and anything else I want to get straight.',
+    'Long form on flood hydrology, models, and software, by Chris Cameron-Hann.',
+  alternates: { canonical: '/articles' },
 }
 
 export default async function ArticlesIndex() {
@@ -46,7 +47,7 @@ export default async function ArticlesIndex() {
   return (
     <SimpleLayout
       title="Writing"
-      intro="Long form on the work, and anything else I want to get straight. Short versions go on X."
+      intro="Long form on flood hydrology, models, and software. Short versions go on X at @camerhann."
     >
       <div className="md:border-l md:border-zinc-100 md:pl-6 md:dark:border-zinc-700/40">
         <div className="flex max-w-3xl flex-col space-y-16">

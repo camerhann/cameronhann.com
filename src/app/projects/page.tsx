@@ -6,21 +6,32 @@ import { SimpleLayout } from '@/components/SimpleLayout'
 import logo7analytics from '@/images/logos/7analytics.svg'
 import logoAegaea from '@/images/logos/aegaea.svg'
 import logoHydrometric from '@/images/logos/hydrometric.svg'
+import logoWorldBank from '@/images/logos/world-bank.svg'
 
 const projects = [
   {
     name: 'Aegaea',
     description:
-      'Flood risk consultancy I founded. Modelling, drainage, planning — and a team that can issue without me in the loop.',
+      'Flood risk consultancy I founded in 2012. Modelling, drainage, planning — and a team that can issue without me in the loop. I am founder and CTO.',
     link: { href: 'https://aegaea.com', label: 'aegaea.com' },
     logo: logoAegaea,
   },
   {
     name: '7Analytics',
     description:
-      'Flood data for insurers and asset owners, at building scale, trained on claims. I am CTO.',
+      'Flood data for insurers and asset owners, at building scale, trained on claims. I joined in 2024 and I am CTO.',
     link: { href: 'https://7analytics.ai', label: '7analytics.ai' },
     logo: logo7analytics,
+  },
+  {
+    name: 'World Bank',
+    description:
+      'Hydrometeorology advice since 2020: observation networks, flood forecasting, and the service that has to run. Named hydrological consultant on Sri Lanka’s Climate Resilience programme.',
+    link: {
+      href: 'https://aegaea.com/about-us/news/aegaea-director-appointed-to-world-bank-group/',
+      label: 'World Bank hydrology group',
+    },
+    logo: logoWorldBank,
   },
   {
     name: 'Hydrometric',
@@ -45,7 +56,8 @@ function LinkIcon(props: React.ComponentPropsWithoutRef<'svg'>) {
 export const metadata: Metadata = {
   title: 'Work',
   description:
-    'What I spend my time on. The companies are how the work ships, not the point of this site.',
+    'Aegaea, 7Analytics, World Bank hydrometeorology advice, and Hydrometric. The companies are how the work ships.',
+  alternates: { canonical: '/projects' },
 }
 
 export default function Projects() {
@@ -56,7 +68,7 @@ export default function Projects() {
     >
       <ul
         role="list"
-        className="grid grid-cols-1 gap-x-12 gap-y-16 sm:grid-cols-2 lg:grid-cols-3"
+        className="grid grid-cols-1 gap-x-12 gap-y-16 sm:grid-cols-2"
       >
         {projects.map((project) => (
           <Card as="li" key={project.name}>

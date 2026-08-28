@@ -1,0 +1,146 @@
+import { ArticleLayout } from '@/components/ArticleLayout'
+
+export const article = {
+  author: 'Chris Cameron-Hann',
+  date: '2026-08-27',
+  title: 'What a river remembers',
+  description:
+    'How far back 644 British catchments remember their rain, and why it changes how a design flood should be estimated.',
+  image: '/images/articles/what-a-river-remembers/00-cover.jpg',
+}
+
+export const metadata = {
+  title: article.title,
+  description: article.description,
+  authors: [
+    { name: 'Chris Cameron-Hann', url: 'https://cameronhann.com/about' },
+  ],
+  alternates: { canonical: '/articles/what-a-river-remembers' },
+  openGraph: {
+    type: 'article',
+    publishedTime: article.date,
+    authors: ['Chris Cameron-Hann'],
+    images: [article.image],
+  },
+  twitter: {
+    card: 'summary_large_image',
+    creator: '@camerhann',
+    images: [article.image],
+  },
+}
+
+export default (props) => <ArticleLayout article={article} {...props} />
+
+We spent the summer trying to beat the UK flood statistics on their own terms. We couldn’t. Then we found we had been asking the wrong question. This changes how I think a design flood should be estimated.
+
+![Map of Britain coloured by how far back catchments remember antecedent rainfall](/images/articles/what-a-river-remembers/00-cover.jpg)
+
+If you need the 1-in-100 flood for a site with no river gauge, the standard method does not look at that river. It estimates a typical flood from a national formula, then borrows the shape of the flood-frequency curve from 15 or 20 other rivers that look similar on paper.
+
+At no point does it use the rain that actually falls on the catchment, or ask what state the ground was in when the big floods came. Every year is treated as a fresh roll of the same dice.
+
+It is a good method. It has held up for decades. I wanted to know whether a model given only the rain record and the map could do better.
+
+## The belief we started with
+
+Our early results said no. We measured that the same rainfall on the same catchment produced flood peaks that varied by about 1.7 times between events, and that nothing we could observe explained the difference. Not the rain before the storm. Not the storm’s timing. Not radar showing where the storm sat or which way it moved.
+
+The conclusion wrote itself: flood response has an irreducible floor, and a data-driven model can’t get under it.
+
+That conclusion was wrong. The reason matters more than the result.
+
+## Where the data lied to us
+
+Our event dataset was built from the flood databases, which record the biggest flood of each year. That is what everybody uses. It is also a sample selected on the outcome.
+
+It is like studying what makes people tall by measuring only the tallest person in each town: you learn nothing about what makes anyone tall, and the small effects you are looking for vanish.
+
+Worse, the very largest floods were often missing. Gauges misbehave in extreme events, the readings get flagged and the flagged events get dropped. When we checked, the largest flood on record was absent from our data at 6 out of 10 gauges.
+
+So we rebuilt the evidence base from the rain side. Every storm of any size, 630,000 of them across 670 catchments over 50 years, and whatever the river did in response. Good, bad or nothing. Only 1 storm in 20 turned out to be a year’s largest flood.
+
+## Same rain, same catchment
+
+| Corpus                         | Spread of the peak, P90 ÷ P10 |
+| ------------------------------ | ----------------------------: |
+| Old corpus: annual maxima only |                         1.73× |
+| Same data, AMAX subsample      |                         1.60× |
+| All storms, unselected         |                         4.24× |
+| Biggest 20% of storms          |                         2.19× |
+| After conditioning on state    |                         1.83× |
+
+![Bar chart showing how annual-maximum selection compresses the apparent spread of flood peaks](/images/articles/what-a-river-remembers/01-selection.jpg)
+
+The same catchment. Storms of the same depth and duration.
+
+Keep only each year’s biggest flood and the spread looks like 1.6×. Keep every storm and it is 4.2×. The old number was the selection, not the river.
+
+## What the full record shows
+
+The same rain on the same catchment does not produce the same flood. The state of the ground beforehand explains roughly half the difference.
+
+![Held-out variance explained by antecedent rainfall, evaporation and starting flow](/images/articles/what-a-river-remembers/02-state-variance.jpg)
+
+That is not a surprise to anybody who has stood in a field in February. What surprised me is how cleanly the memory of a catchment is written in its landscape.
+
+For each gauge, we asked which rainfall window, from 1 day to 6 months, best predicted its storm response. Steep, wet upland catchments remember about 2 months. Flat, dry, chalky lowland catchments remember 6. Slope alone explains most of it. Mean rainfall explains more.
+
+![Scatter plot relating the best antecedent-rain window to catchment slope](/images/articles/what-a-river-remembers/03-memory-window.jpg)
+
+Long memory in the lowland east and the chalk. Short memory in the wet west and north.
+
+![Map of 644 British gauges coloured from short to long catchment rainfall memory](/images/articles/what-a-river-remembers/04-memory-map.jpg)
+
+This is the pattern any hydrologist would sketch from intuition. The difference is that it is now measured from 630,000 storms and it transfers to catchments with no gauge.
+
+## Building the alternative
+
+Once you have a model of how a catchment converts a storm into a flood, given its state, you do not need to borrow a frequency curve from anybody.
+
+Take the catchment’s own rain record. Cut it into storms. For each storm, ask the model what this river would have done. Thirty years of that gives 30 years of simulated floods for a river you have never measured. The 1-in-10 and the 1-in-20 come straight off it. No index flood, no donor gauges, no pooling group.
+
+The model itself is unglamorous. Gradient boosting trained on the storms at every other catchment.
+
+It sees the storm: depth, duration and wettest day. It sees the state: rain over the previous 1 to 180 days, evaporation over the previous 30 and 90 days, and season. It sees the map: area, slope, elevation, climate normals, soil texture, the full HOST soil classification, aquifer fractions, land cover and reservoirs.
+
+Storm depth matters most. Then the wettest day. Then, and this was the quiet surprise, evaporation demand over the previous 3 months. How dry the ground has become outranks any single window of antecedent rain. Long memory beats short memory. Soil class beats soil texture.
+
+## Hiding the gauges
+
+The only honest test is to hide the gauge.
+
+We gave the model 381 catchments it had never seen, let it predict their floods from rain and map alone, then opened the gauge records and scored both methods on absolute flows against 30 years of observed annual maxima.
+
+We wrote the pass mark down before we ran it. Then we ran it 3 more times with the cards shuffled.
+
+For an ungauged site, the model is at least as good as the standard method at every return period we can test, better on the typical flood and better at describing the range of what could happen. That range is what an engineer needs for a margin.
+
+At 1-in-20 the two are level. On catchments under 70 km² the standard method keeps a small edge. We now know why: there is information about small catchments that is not in any map or rain product we hold. Only a gauge supplies it.
+
+![Held-out catchment comparison of the event model and the FEH ungauged chain](/images/articles/what-a-river-remembers/05-validation.jpg)
+
+What is interesting is what happens if you give both methods the site’s own record. Then they agree, almost exactly. A gauge tells you the level, and after that everybody is working with the same information.
+
+This is not a claim that machine learning beats hydrology. It is a claim about where the information lives: in the rain and the ground, not in a formula fitted to other rivers.
+
+## What changes
+
+Three things.
+
+The index flood stops being an input you estimate and scale. The simulation gives you the flood directly, and its own median is a better estimate of the typical flood than the national formula.
+
+The 1-in-100 stops being a single number and becomes a range sized to the catchment, because the range is measured, not assumed.
+
+The estimate for every catchment in the country improves each time a gauge is added or another year of rain is recorded, without anybody changing the method. That last point is why we are now pulling every 15-minute flow record in Britain into the same pipeline.
+
+Beyond 1-in-20, nobody has the observations to test anybody. I would be suspicious of a method that claims otherwise.
+
+What we can say is that, up to the limit of the evidence, a model that has only ever seen the rain and the map does the job as well as the one we have all been using, and tells you honestly how sure it is.
+
+## Method and provenance
+
+CAMELS-GB v2 (UKCEH, OGL), CEH-GEAR rainfall, LandIS HOST via the national descriptor rail and NRFA Peak Flow v14. Rain-defined storms, station-blocked cross-validation, pre-registered scoring with CRPS and 3 replications.
+
+Not yet peer reviewed. Code and results are in the Hydrometric repository. The national rerun on 1,369 gauges and 1948–2019 rainfall is in progress.
+
+_Originally published as an [X Article](https://x.com/camerhann/status/2092945770139861221) on 27 August 2026._

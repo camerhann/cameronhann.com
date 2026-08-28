@@ -1,0 +1,116 @@
+import { ArticleLayout } from '@/components/ArticleLayout'
+
+export const article = {
+  author: 'Chris Cameron-Hann',
+  date: '2026-08-20',
+  title: 'Why build hydrometric?',
+  description:
+    'Why does a catchment still take five days, and what changes when flood hydrology moves into the browser?',
+  image: '/images/articles/why-build-hydrometric/02-upload.jpg',
+}
+
+export const metadata = {
+  title: article.title,
+  description: article.description,
+  authors: [
+    { name: 'Chris Cameron-Hann', url: 'https://cameronhann.com/about' },
+  ],
+  alternates: { canonical: '/articles/why-build-hydrometric' },
+  openGraph: {
+    type: 'article',
+    publishedTime: article.date,
+    authors: ['Chris Cameron-Hann'],
+    images: [article.image],
+  },
+  twitter: {
+    card: 'summary_large_image',
+    creator: '@camerhann',
+    images: [article.image],
+  },
+}
+
+export default (props) => <ArticleLayout article={article} {...props} />
+
+Hydrometric was born from frustration with legacy processes. The outdated software. The clunky UI. The lack of functionality. So we asked: why can’t it be interesting to do the work? Why not apply modern technology to a 50-year-old problem?
+
+So we did.
+
+[hydrometric.io](https://hydrometric.io) is live.
+
+## Why does a catchment still take five days?
+
+You get a hydrology request. You go to FEH Web, find your catchment, export the ZIP, XML and IDF, and download it. You unpack the ZIP, add the shapefile to QGIS, edit the boundary and make a note of the area change. You edit the XML with the new area. You upload it into a program tied to a single computer and you’re presented with this:
+
+![Legacy desktop station manager showing a dense table of gauging stations](/images/articles/why-build-hydrometric/01-legacy.jpg)
+
+And just like that, you’re back in the early 2000s. The workflow isn’t a workflow. It’s an obstacle.
+
+You get a QMED, you get a pooling group and then you can make some changes. You export it all to Excel and back to QGIS. If you need to make a single change later, or somebody disagrees, you loop back through all the clunky interfaces, rename it and get confused. I know I do.
+
+This is a case of the tool not matching the job, or modern technology.
+
+## The hydrometric.io route
+
+Go to your browser and log in. Upload your ZIP and XML:
+
+![Hydrometric import screen with catchment files selected and the national station map visible](/images/articles/why-build-hydrometric/02-upload.jpg)
+
+You can already see all the stations. Hydrometric parses the ZIP and XML into usable things.
+
+![Hydrometric assessment showing parsed catchment descriptors, boundary and nearby stations](/images/articles/why-build-hydrometric/03-parsed.jpg)
+
+Add it to a project or leave it standalone. You can edit the catchment in your browser and the area updates with it:
+
+![Hydrometric map editor with an adjusted catchment boundary and recalculated area](/images/articles/why-build-hydrometric/04-edit-catchment.jpg)
+
+Within seconds of clicking **Run**, you get an answer. I had problems getting a screenshot because it is that fast:
+
+![Hydrometric analysis progress showing QMED computed and donor candidates fetched in 3.5 seconds](/images/articles/why-build-hydrometric/05-fast-results.png)
+
+That is it for the first analysis. By default, Hydrometric runs the standard FEH analysis route and provides the flows.
+
+The more interesting part comes next.
+
+## Fork the decision, not the spreadsheet
+
+We have reimagined hydrology in the way you might run a software project. You have a default branch, called **main**, and you want to make a change. Fork the analysis at the point you want to change:
+
+![Hydrometric FEH2025 default route with Inspect and Fork controls](/images/articles/why-build-hydrometric/06-fork.jpg)
+
+Make whatever change you need. Main stays locked as the default, so you never lose it.
+
+![Hydrometric forked assessment showing alternative method choices, parameters and results](/images/articles/why-build-hydrometric/07-fork-changes.jpg)
+
+Each assessment takes seconds to compute and every alternative is saved as a fork. When you have decided which fork you prefer and added your notes, scroll down:
+
+![Hydrometric comparison of forked analysis outputs and growth curves](/images/articles/why-build-hydrometric/08-fork-comparison.jpg)
+
+Compare growth curves and outputs. Then the useful part really starts.
+
+## Method Space
+
+We are introducing Method Space by default in Hydrometric. Method Space computes every valid variation of pooling groups and QMED automatically. It shows what your decisions look like in the context of valid calculations, with Environment Agency FSE overlays for context.
+
+![Hydrometric Method Space showing the adopted estimate against distributions of valid alternatives](/images/articles/why-build-hydrometric/09-method-space.jpg)
+
+You can see what moves the needle, refine the analysis and select Method Space variants to compare.
+
+![Method Space distributions for Q30, Q100 and Q1000 with adopted estimates and percentiles](/images/articles/why-build-hydrometric/10-method-space-distributions.png)
+
+What happens next is what really clicks for hydrologists: an automated, functional Flood Estimation Report built from your decisions, with maps, graphics, decision records and error bounds. It is customisable to your company and your client.
+
+The report is editable in the browser. Every change is logged and hashed, so you know who changed it and why.
+
+Download flows directly in the correct format for Flood Modeller Pro and TUFLOW. Apply hydrograph shapes from different methods and carry those choices through to the model. If you only need a download pack, download the ZIP and send it on.
+
+Want the work reviewed? Invite somebody by email to that project. If an Environment Agency hydrologist is reviewing it, invite them too. They can review the project, add notes and ask questions in the same place. The response is there, live in the browser, for you to pick up.
+
+There is more functionality in Hydrometric that I will cover in another article: the technology behind it, gauged-flow routes, custom map data, open-source hydrological descriptors, MCP access and more.
+
+This is the start. We are excited to discuss it at the British Hydrological Symposium in Leeds.
+
+Let’s take community hydrology forward by giving hydrologists the data they need, in one place, when they need it.
+
+I’m excited.
+
+_Originally published as an [X Article](https://x.com/camerhann/status/2090351539374145582) on 20 August 2026._
