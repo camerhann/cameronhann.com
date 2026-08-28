@@ -3,24 +3,59 @@
 import { useEffect, useRef, useState } from 'react'
 
 import { social } from '@/lib/site'
-import { formatPostTime, postHref, type XPost } from '@/lib/x'
 
 declare global {
   interface Window {
     twttr?: {
+      ready: (cb: (twttr: NonNullable<Window['twttr']>) => void) => void
       widgets: {
         createTimeline: (
           source: { sourceType: string; screenName: string },
           target: HTMLElement,
           options?: Record<string, unknown>,
-        ) => Promise<HTMLElement>
+        ) => Promise<HTMLElement | undefined>
       }
     }
   }
 }
 
-function TimelineEmbed() {
+const SCRIPT_SRC = 'https://platform.x.com/widgets.js'
+
+function loadWidgetsScript(): Promise<void> {
+  if (window.twttr?.widgets) {
+    return Promise.resolve()
+  }
+
+  let existing = document.querySelector<HTMLScriptElement>(
+    `script[src="${SCRIPT_SRC}"]`,
+  )
+  if (existing) {
+    return new Promise((resolve, reject) => {
+      existing.addEventListener('load', () => resolve(), { once: true })
+      existing.addEventListener(
+        'error',
+        () => reject(new Error('widgets.js')),
+        {
+          once: true,
+        },
+      )
+    })
+  }
+
+  return new Promise((resolve, reject) => {
+    let script = document.createElement('script')
+    script.src = SCRIPT_SRC
+    script.async = true
+    script.charset = 'utf-8'
+    script.onload = () => resolve()
+    script.onerror = () => reject(new Error('widgets.js'))
+    document.body.appendChild(script)
+  })
+}
+
+export function XFeed() {
   let nodeRef = useRef<HTMLDivElement>(null)
+  let [status, setStatus] = useState<'loading' | 'ready' | 'blocked'>('loading')
 
   useEffect(() => {
     let node = nodeRef.current
@@ -29,73 +64,50 @@ function TimelineEmbed() {
     }
 
     let cancelled = false
-
-    function create() {
-      if (cancelled || !node || !window.twttr?.widgets) {
-        return
+    let timeout = window.setTimeout(() => {
+      if (!cancelled && !node.querySelector('iframe')) {
+        setStatus('blocked')
       }
-      node.replaceChildren()
-      window.twttr.widgets.createTimeline(
-        { sourceType: 'profile', screenName: 'camerhann' },
-        node,
-        {
-          height: 520,
-          chrome: 'noheader nofooter noborders',
-          tweetLimit: 6,
-          dnt: true,
-        },
-      )
-    }
+    }, 5000)
 
-    if (window.twttr?.widgets) {
-      create()
-      return
-    }
-
-    let src = 'https://platform.x.com/widgets.js'
-    let existing = document.querySelector<HTMLScriptElement>(
-      `script[src="${src}"]`,
-    )
-    if (existing) {
-      existing.addEventListener('load', create, { once: true })
-      return () => {
-        cancelled = true
-      }
-    }
-
-    let script = document.createElement('script')
-    script.src = src
-    script.async = true
-    script.onload = create
-    document.body.appendChild(script)
-
-    return () => {
-      cancelled = true
-    }
-  }, [])
-
-  return <div ref={nodeRef} className="mt-4 min-h-40" />
-}
-
-export function XFeed() {
-  let [posts, setPosts] = useState<XPost[] | null>(null)
-
-  useEffect(() => {
-    let ignore = false
-    fetch('/api/x-feed')
-      .then((response) => (response.ok ? response.json() : { posts: [] }))
-      .then((data: { posts?: XPost[] }) => {
-        if (!ignore) {
-          setPosts(Array.isArray(data.posts) ? data.posts : [])
+    loadWidgetsScript()
+      .then(() => {
+        if (cancelled || !node) {
+          return
+        }
+        let twttr = window.twttr
+        if (!twttr?.widgets) {
+          throw new Error('no widgets')
+        }
+        node.replaceChildren()
+        return twttr.widgets.createTimeline(
+          { sourceType: 'profile', screenName: 'camerhann' },
+          node,
+          {
+            height: 560,
+            chrome: 'noheader nofooter noborders',
+            tweetLimit: 6,
+            dnt: true,
+          },
+        )
+      })
+      .then((element) => {
+        if (cancelled) {
+          return
+        }
+        if (element || node.querySelector('iframe')) {
+          setStatus('ready')
         }
       })
       .catch(() => {
-        if (!ignore) {
-          setPosts([])
+        if (!cancelled) {
+          setStatus('blocked')
         }
       })
+
     return () => {
-      ignore = true
+      cancelled = true
+      window.clearTimeout(timeout)
     }
   }, [])
 
@@ -116,33 +128,26 @@ export function XFeed() {
       <p className="mt-2 text-sm text-zinc-500 dark:text-zinc-400">
         Short versions of the work, posted as I do it.
       </p>
-      {posts === null ? (
+      <div
+        ref={nodeRef}
+        className={status === 'blocked' ? 'hidden' : 'mt-4 min-h-40'}
+      />
+      {status === 'loading' && (
         <p className="mt-4 text-sm text-zinc-400 dark:text-zinc-500">
           Loading posts…
         </p>
-      ) : posts.length > 0 ? (
-        <ol className="mt-4 divide-y divide-zinc-100 dark:divide-zinc-700/40">
-          {posts.map((post) => {
-            let when = formatPostTime(post.createdAt)
-            return (
-              <li key={post.id} className="py-3 first:pt-0 last:pb-0">
-                <a
-                  href={postHref(post.id)}
-                  className="block text-sm text-zinc-600 transition hover:text-zinc-900 dark:text-zinc-400 dark:hover:text-zinc-100"
-                >
-                  <p className="whitespace-pre-wrap">{post.text}</p>
-                  {when && (
-                    <time className="mt-2 block text-xs text-zinc-400 dark:text-zinc-500">
-                      {when}
-                    </time>
-                  )}
-                </a>
-              </li>
-            )
-          })}
-        </ol>
-      ) : (
-        <TimelineEmbed />
+      )}
+      {status === 'blocked' && (
+        <p className="mt-4 text-sm text-zinc-500 dark:text-zinc-400">
+          The live timeline is on X.{' '}
+          <a
+            href={social.x.href}
+            className="font-medium text-teal-500 hover:text-teal-600"
+          >
+            Open {social.x.handle}
+          </a>
+          .
+        </p>
       )}
     </div>
   )
