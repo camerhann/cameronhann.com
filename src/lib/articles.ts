@@ -12,6 +12,18 @@ export interface ArticleWithSlug extends Article {
 
 const articleLoaders = [
   {
+    slug: 'the-flood-is-a-shape',
+    load: () => import('../app/articles/the-flood-is-a-shape/page.mdx'),
+  },
+  {
+    slug: 'tiamat',
+    load: () => import('../app/articles/tiamat/page.mdx'),
+  },
+  {
+    slug: 'the-probabilistic-flood',
+    load: () => import('../app/articles/the-probabilistic-flood/page.mdx'),
+  },
+  {
     slug: 'what-a-river-remembers',
     load: () => import('../app/articles/what-a-river-remembers/page.mdx'),
   },
