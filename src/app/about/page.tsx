@@ -99,11 +99,6 @@ export default function About() {
             </p>
             <div className="mt-6 space-y-7 text-base text-zinc-600 dark:text-zinc-400">
               <p>
-                Flood risk is sold as a map. It isn’t. It is a claim about how
-                water moves, a system that has to run, and a team that will
-                still be there when someone asks: are you sure?
-              </p>
-              <p>
                 I founded Aegaea in 2012 and I am CTO there. I am also CTO at
                 7Analytics, building flood data for insurers at building scale.
                 I advise the World Bank on hydrometeorology and flood
