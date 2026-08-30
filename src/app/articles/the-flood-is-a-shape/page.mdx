@@ -5,7 +5,7 @@ export const article = {
   date: '2026-08-29',
   title: 'The flood is a shape',
   description:
-    'Catchment-Event Frequency Analysis: why a design flood should look like a river, not a triangle.',
+    'Catchment-Event Frequency Analysis, and why the hydrograph a model needs is not a triangle scaled to a peak.',
   image: '/images/articles/the-flood-is-a-shape/00-cover.jpg',
 }
 
@@ -31,94 +31,60 @@ export const metadata = {
 
 export default (props) => <ArticleLayout article={article} {...props} />
 
-A design flood is usually sold as a number. The 1-in-100. Then somebody glues a triangle to it and calls the triangle a hydrograph.
+When a flood model needs an inflow, the standard UK route estimates a peak from the Flood Estimation Handbook (FEH) and then applies a synthetic hydrograph. The peak is estimated from data. The shape is a convention: a triangle, or a winter profile, scaled to that peak.
 
-Real rivers do not flood as triangles.
+A hydrograph is flow against time. Rise, peak, fall, recession. It is the thing you actually put into the model. Two hydrographs with the same peak can carry very different volumes, arrive on different timescales, and wet different land. The convention is doing more work than it looks.
 
-![Three characteristic hydrographs — Tame, Kent and Lambourn — beside the title The flood is a shape](/images/articles/the-flood-is-a-shape/00-cover.jpg)
+![Three characteristic hydrographs for the Tame, Kent and Lambourn](/images/articles/the-flood-is-a-shape/00-cover.jpg)
 
-A hydrograph is the simplest honest picture of a flood: flow, against time. It rises, it peaks, it falls, and then it hangs around. That shape *is* the flood. The peak is just the loudest moment.
+CEFA (Catchment-Event Frequency Analysis) exists because that shape can be treated as a property of the catchment, not as a template.
 
-If you only take a peak into a model, you have already chosen a shape. You just have not admitted it.
+## Same peak, different flood
 
-## What history keeps drawing
+CEFA produces a characteristic hydrograph from a catchment's own storm history. Peak-normalised, the three below are the same height on the chart. They are not the same flood.
 
-British floods do not come in one flavour. They come in a small zoo of shapes, and anyone who has sat through a winter of them already knows the animals.
-
-Boscastle, 16 August 2004. A small Cornish catchment, a convective cell, out of bank in the afternoon and back toward bankfull by evening. Hours, not days. The Valency did not wait for a design-storm profile.
-
-Storm Desmond, 5 December 2015. Cumbria already wet. Orographic rain that would not stop. The Eden at Sheepmount hit about 1,680 cubic metres a second. The Kent at Sedgwick about 527. Those are big peaks. The interesting part is the shape: a wet landscape, a long storm, a river that had somewhere to put the water and then did not.
-
-Summer 2007 in Severn country. Slow, fat, days. The floodplain had time to fill because the hydrograph had time to sit.
-
-Then the double burst: two rain cells, one catchment, two peaks. A triangle has never heard of that storm.
-
-![Four schematic hydrographs: Boscastle flash, Storm Desmond, summer 2007, and a double burst](/images/articles/the-flood-is-a-shape/03-history.jpg)
-
-These are schematics of event *types*, not a particular gauge trace. They are still the shapes history keeps handing us. A method that only returns a peak still has to pick one of them. That pick is the flood you put into the model. Get it wrong and you have the right number on the wrong day, with the wrong volume, over the wrong houses.
-
-## Rivers have signatures
-
-Ask CEFA (Catchment-Event Frequency Analysis) for three catchments of similar size and it will not give you three versions of the same cartoon.
-
-The Tame at Bescot, urban West Midlands: up in about two hours.
-
-The Kent above Kendal, steep and wet: about four.
-
-The Lambourn at Shaw, chalk: still draining three days later.
+On the Tame at Bescot, 174 km² of urban West Midlands, the characteristic rise is about two hours. On the Kent above Kendal, similar area, steep and wet, it is about four. On the Lambourn at Shaw, chalk, the recession is still running three days later.
 
 ![Peak-normalised CEFA characteristic hydrographs for the Tame, the Kent and the Lambourn](/images/articles/the-flood-is-a-shape/01-signatures.jpg)
 
-Peak-normalise them and they look like three different instruments. They are.
+The volume under the curve is the useful number. A peak-hour is one hour of flow at the peak rate. The Tame and the Kent carry about 11 of those. The Lambourn carries about 31. Same peak, almost three times the water.
 
-The urban hydrograph is a punch. The Cumbrian one is a punch with a bit more shoulder. The chalk stream is a flood that stays. Same height on the chart. Completely different water.
+![Volume under the same three hydrographs, peak-normalised](/images/articles/the-flood-is-a-shape/02-volume.jpg)
 
-![The same three hydrographs with volume shaded, showing the Lambourn carrying far more water](/images/articles/the-flood-is-a-shape/02-volume.jpg)
+That is why time-to-peak and hydrograph volume are not decoration around a 1-in-100. They decide whether the floodplain has time to fill. A 2D model given the Kent shape and the Lambourn peak, or the other way around, is answering a different question from the one on the drawing.
 
-A peak-hour is a dull unit until you use it. It means one hour of flow at the peak rate. The Kent and the Tame carry about eleven of those. The Lambourn carries about thirty. Same peak. Almost three times the water. That is the difference between a flood that hits a wall and a flood that fills a valley.
+![A triangular design hydrograph overlaid on a family of catchment shapes](/images/articles/the-flood-is-a-shape/04-triangle.jpg)
 
-This is why hydrologists argue about time-to-peak, and why a 2D modeller should care. Volume and timing decide whether the floodplain fills. The peak only decides whether you noticed.
+FEH is good at the peak. It was never trying to be a family of historical shapes. If you need to run a hydraulic model you still have to decide when the water arrives and how long it sits. That decision is currently a convention. CEFA makes it a catchment estimate.
 
-## The cartoon
+## Shapes from the record
 
-British design practice has always known it needed a hydrograph. So it invented a tidy one. A triangle, or a winter profile, scaled to a peak from the Flood Estimation Handbook (FEH), the standard UK method for saying how rare a flood is.
+The same variation is in the events, not only in catchment type.
 
-![A dashed triangular design hydrograph overlaid on a family of real catchment shapes](/images/articles/the-flood-is-a-shape/04-triangle.jpg)
+Boscastle on 16 August 2004 was a convective flash flood on the Valency: out of bank in the afternoon, back toward bankfull by evening. Hours, not days. Storm Desmond on 5 December 2015 was a long orographic storm on already-wet Cumbrian catchments. The Eden at Sheepmount reached about 1,680 m³/s; the Kent at Sedgwick about 527 m³/s. Summer 2007 on the Severn ran over days. A large minority of events are double-peaked, because the storm was.
 
-The triangle is tidy. The river is not. FEH is good at the peak. It was never trying to be a family of historical shapes. If you need to run a hydraulic model, you still have to decide when the water arrives and how long it sits. That decision is currently a convention. CEFA exists to make it a property of the catchment.
+![Schematic hydrographs of Boscastle, Storm Desmond, summer 2007 and a double-burst event](/images/articles/the-flood-is-a-shape/03-history.jpg)
 
-## What CEFA is
+Those panels are schematics of event types, not a particular 15-minute gauge trace. They are here because a method that only returns a peak still has to pick one of them. Get that pick wrong and you can have a defensible peak on the wrong day, with the wrong volume, over the wrong houses.
 
-Catchment-Event Frequency Analysis is a storm-response method. It looks at the storms that actually fall on a catchment, over decades, and asks what the river did with them. Not just the biggest flood of each year. The ordinary ones, the near-misses, the wet-ground monsters, the dry-ground fizzles.
+## What CEFA actually returns
 
-That is the opposite of borrowing a frequency curve from fifteen other rivers that look similar on paper. Those neighbours are useful. They are also not this river, in this storm, with this ground.
+CEFA is a storm-response method. It takes the storms that fall on a catchment over decades and estimates the river's response. Not only each year's largest flood. The ordinary storms as well. The output is a range on the peak, and a characteristic hydrograph for that catchment.
 
-The public version of that idea is already live. Click a point in [hydrometric.io](https://hydrometric.io) and CEFA returns a flood estimate as a range, not a single heroic number, plus a **characteristic hydrograph** for that catchment. The live river-flow outlook at [forecast.cameronhann.com](https://forecast.cameronhann.com) is the same engine pointed at this week's rain.
+That is a different object from FEH pooling, which borrows the shape of the flood-frequency curve from other rivers that look similar on paper. Pooling is useful. Those neighbours are still not this catchment's storm record.
 
-![A Cumbrian CEFA hydrograph drawn as a typical line inside a P10 to P90 band](/images/articles/the-flood-is-a-shape/05-band.jpg)
+The public version is live. A point on [hydrometric.io](https://hydrometric.io) returns P10, P50 and P90 peaks plus a characteristic hydrograph. The same engine, pointed at forecast rainfall, is the experimental outlook at [forecast.cameronhann.com](https://forecast.cameronhann.com).
 
-P10, P50 and P90 are labels for the low, typical and high end of the range. In 10 cases out of 100 the peak stays below the bottom line. In 90 it stays below the top. The shape in the middle is the catchment's characteristic hydrograph: its usual rise, fall and recession, scaled to the peak.
+![A Cumbrian CEFA hydrograph as a typical line inside a P10 to P90 band](/images/articles/the-flood-is-a-shape/05-band.jpg)
 
-It is not yet a new shape for every storm. That is the next move, and it is the one that matters for forecasting. Today's product tells you how this river tends to flood. The method underneath is already asking the sharper question: given this rain, and how wet the ground is, what should this river do?
+P10, P50 and P90 are the low, typical and high ends of the peak range. In 10 cases out of 100 the peak stays below the bottom line; in 90 it stays below the top. The shape is the catchment's characteristic hydrograph, scaled to those peaks.
 
-I wrote about the ground-state half of that question in [What a river remembers](/articles/what-a-river-remembers). This is the other half. The hydrograph.
+It is not yet a new shape for each storm. Storm-conditioned shape is the next product. Today's hydrograph is how this river tends to flood, given its landscape, not how this particular burst will. Antecedent state, the other half of the same programme, is in [What a river remembers](/articles/what-a-river-remembers).
 
-## Why it exists
+## Limits
 
-We have the rain record. We have the flow record. We have enough storms that the hydrograph can be treated as something a catchment owns, rather than something we invent because the software needs a polyline.
+The FEH statistical pathway remains the method you can currently defend in a flood risk assessment. CEFA is beta. It is not certified for design. Beyond the 1-in-50, the far tail still uses FEH pooling. That is stated because nobody has the observations to test a 1-in-1000 claim, including ours.
 
-The FEH statistical pathway stays. It is the language a case officer already speaks, and it is not going anywhere. CEFA sits beside it as a different object: the storms this catchment actually had, turned into a band and a shape.
+What CEFA does give you is a second view of the same catchment: a band instead of a single peak, and a hydrograph that belongs to the river rather than to the template.
 
-Beyond the 1-in-50, the far tail still leans on FEH pooling. That is the honest join, not a trick. Nobody has the observations to test anybody at 1-in-1000, and I would be suspicious of a method that claimed otherwise.
-
-CEFA is beta. It is not certified for design. If you are issuing a flood risk assessment, you still need the FEH pathway you can defend. What CEFA gives you is a second view of the same catchment: a range, a signature, and a way to talk about the hydrograph as if it were real.
-
-## Two products, one idea
-
-[hydrometric.io](https://hydrometric.io) is the design desk. Catchment, band, characteristic hydrograph.
-
-[forecast.cameronhann.com](https://forecast.cameronhann.com) is the same idea pointed at the next five days. Experimental. Not a flood warning. It will tell you roughly how big a gauge's response looks. It is deliberately silent on the exact minute of the peak, because timing is the part that is easiest to oversell.
-
-The next article is [Tiamat](/articles/tiamat): the GPU engine that takes a hydrograph and spreads it across the land. Then [what the two of them make possible](/articles/the-probabilistic-flood).
-
-If you only take a peak into a flood model, you have already chosen a shape. CEFA is how we start choosing it on purpose.
+[Tiamat](/articles/tiamat) is the engine that spreads that hydrograph across the land. Once those maps are running on the same storms, the two together are a [probability of inundation](/articles/the-probabilistic-flood).

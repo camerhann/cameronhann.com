@@ -5,7 +5,7 @@ export const article = {
   date: '2026-08-29',
   title: 'The probabilistic flood',
   description:
-    'CEFA tells you what the river will do. Tiamat tells you where the water goes. Together they are a chance, not a line on a map.',
+    'CEFA estimates the hydrograph as a range. Tiamat spreads each member. The stack is a chance a building is wet, not a 1-in-100 outline.',
   image: '/images/articles/the-probabilistic-flood/01-handshake.jpg',
 }
 
@@ -31,58 +31,38 @@ export const metadata = {
 
 export default (props) => <ArticleLayout article={article} {...props} />
 
-UK flood risk is still sold as an outline. The 1-in-100. A polygon. A yes or a no.
+A UK flood map is still usually a 1-in-100 outline. That was a reasonable product when a model run took a long time and a forecast was a warning symbol. The question we can now ask is narrower: given this storm, on this ground, what is the chance this building is wet?
 
-That was a reasonable product when a model run cost a fortnight and a forecast was a warning symbol. It is a strange product now that we can ask a more useful question: given this storm, on this ground, what is the chance this building gets wet?
+![Storm to CEFA hydrograph band to Tiamat depth map to probability a building floods](/images/articles/the-probabilistic-flood/01-handshake.jpg)
 
-![Four-step chain: storm, CEFA hydrograph band, Tiamat depth map, probability a building floods](/images/articles/the-probabilistic-flood/01-handshake.jpg)
+[CEFA](/articles/the-flood-is-a-shape) (Catchment-Event Frequency Analysis) estimates the hydrograph as a range. [Tiamat](/articles/tiamat) spreads each member of that range across the terrain. The fraction of members that wet a cell is a probability. It is a count of computed floods, not a qualitative label.
 
-[CEFA](/articles/the-flood-is-a-shape) (Catchment-Event Frequency Analysis) turns rain and catchment into a hydrograph with a range. [Tiamat](/articles/tiamat) turns each hydrograph into a depth map. Stack the maps and each cell has a fraction: dry in the low member, wet in the high one. That fraction is a probability. It is not a mood. It is a count of physically computed floods.
+## Where the join sits
 
-## The missing object
+British practice split the job years ago. The Flood Estimation Handbook (FEH) statistical pathway gives a peak: how rare, how big. A rainfall-runoff method gives a hydrograph, usually a synthetic one. A hydraulic model spreads that hydrograph and draws a map.
 
-British flood practice split the job years ago and never quite glued it back together.
+Each step is competent. The join is the weak point. The peak does not know the volume. The synthetic hydrograph does not know this storm. The map does not know it was fed a template. You can do each step correctly and still put the water in the wrong street, because the object that carries the storm into the map was never this river.
 
-The statistical pathway, FEH (the Flood Estimation Handbook), gives you a peak. How rare. How big.
+CEFA makes the hydrograph a catchment estimate, with a band instead of a single line. Tiamat is fast enough to spread the band, not only the middle.
 
-The rainfall-runoff pathway gives you a hydrograph. Usually a tidy one.
+## What is online now
 
-The hydraulic model spreads that hydrograph across the land and draws a map.
+The live public piece is the flow half. [forecast.cameronhann.com](https://forecast.cameronhann.com) takes forecast rainfall for England and Wales and reports a CEFA peak range at the gauges. Experimental. Not a flood warning. For those, use the [Environment Agency service](https://check-for-flooding.service.gov.uk/). It will tell you roughly how big a river's response looks. It is silent on the exact minute of the peak, because timing is the part that is easiest to oversell.
 
-Each step is competent. The join is the weak point. The peak does not know the volume. The triangle does not know this storm. The map does not know it was fed a cartoon. You can do everything "right" and still have the water in the wrong street, because the object that carries the storm into the map was never this river.
+[hydrometric.io](https://hydrometric.io) is the same engine on the design desk: a catchment, a band, a characteristic hydrograph.
 
-CEFA is the hydrograph as a property of the catchment, with a band instead of a pretence of certainty. Tiamat is physics fast enough to spread the band, not just the middle. The handshake is the flood.
-
-## What is already online
-
-The live public piece is the first half. [forecast.cameronhann.com](https://forecast.cameronhann.com) takes forecast rainfall for England and Wales and reports a CEFA peak range at the gauges. Experimental. Not a flood warning. For those, use the [Environment Agency service](https://check-for-flooding.service.gov.uk/).
-
-The forecast will tell you roughly how big a river's response looks. It is silent on the exact minute of the peak. Magnitude first. Timing is the part that is easiest to oversell.
-
-[hydrometric.io](https://hydrometric.io) is the same engine on the design desk: click a catchment, get a band and a characteristic hydrograph.
-
-Neither site draws inundation yet. That is the next link.
+Neither site draws inundation yet.
 
 ## What goes up next
 
-Tiamat forecasts will be run and put online. The thing I want on that page is not another 1-in-100 outline. It is this week's rain, turned into this week's chance.
+Tiamat forecasts will be run and put online. What I want on that page is this week's rain, turned into this week's chance, not another 1-in-100 outline.
 
-A low hydrograph. A typical one. A high one. Three Tiamat maps. A cell that is dry in the first and wet in the third is not "the 1-in-100". It is a place the storm can reach, with a measured fraction of the ensemble behind it.
+A low hydrograph, a typical one, a high one. Three Tiamat maps. A cell that is dry in the first and wet in the third is not "the 1-in-100". It is a place the storm can reach, with a measured fraction of the ensemble behind it.
 
 ![Schematic of three Tiamat maps from the low, typical and high CEFA hydrographs](/images/articles/the-probabilistic-flood/02-ensemble.jpg)
 
-That is a different product from a planning flood zone. A zone is a policy. A probability updates when the rain forecast does. Insurers already think that way. So do people who live on the wrong side of a line that was drawn for a different storm.
+That is a different product from a planning flood zone. A zone is a policy. A probability updates when the rain forecast does.
 
-Two habits have to go for that to mean anything.
+Two things have to be true for that to mean anything. There is not a single hydrograph for a given rarity: a short convective peak and a long winter soak at the same return period do not cover the same houses, so Tiamat has to run the band, not the middle. And a flood map is not a photograph of a peak. It is an integral of volume and timing through the terrain. That is why the [hydrograph](/articles/the-flood-is-a-shape) matters, and why [Tiamat](/articles/tiamat) is a physics engine rather than a lookup table.
 
-The first is the single hydrograph. There is not one. A peak of a given rarity can arrive as a short convective punch or a long winter soak. Those two floods do not cover the same houses. CEFA already ships a band. Tiamat should run the band, not the middle.
-
-The second is the idea that a flood map is a photograph of a peak. A map is an integral. Volume, timing, and whether the floodplain had time to fill *are* the flood. That is why the [shape article](/articles/the-flood-is-a-shape) exists, and why [Tiamat](/articles/tiamat) is a physics engine rather than a lookup table.
-
-## The future we actually hold
-
-I am not claiming we now know the future. I am claiming we finally have the objects the future is made of: a storm, a catchment, a hydrograph with a range, and a model fast enough to spread it.
-
-The 1-in-100 can stay as a planning language. The operational product is a probability, updated when the rain is.
-
-That is the thing in our hands. The work is to put it on a map without lying about the edges.
+I am not claiming we now know the future. The 1-in-100 can stay as planning language. What changes is the operational object: a probability for this storm, updated when the rain is, once Tiamat is running on the same forecasts CEFA already is.

@@ -5,7 +5,7 @@ export const article = {
   date: '2026-08-29',
   title: 'Tiamat',
   description:
-    'A GPU flood engine that turns a hydrograph into a map you can inspect.',
+    'A GPU two-dimensional flood model that turns a hydrograph into a depth map you can inspect.',
   image: '/images/articles/tiamat/greenbrier-depth-map.png',
 }
 
@@ -31,46 +31,40 @@ export const metadata = {
 
 export default (props) => <ArticleLayout article={article} {...props} />
 
-A flood map is usually a photograph of a peak. A line around the 1-in-100. Tiamat is the physics of how the water gets there.
+Tiamat is a two-dimensional flood model that runs on NVIDIA GPUs at [7Analytics](https://7analytics.ai), where I am CTO. It takes terrain, river geometry and water (rainfall or a hydrograph) and calculates how that water moves across the floodplain. The output is a georeferenced map of maximum depth. Extent is the wet footprint of that depth.
 
-In the Babylonian story, Tiamat is the sea before the world is ordered. The job of the model is the same: take chaotic water and make it inspectable.
-
-Tiamat is a two-dimensional flood model. It runs on NVIDIA GPUs, at [7Analytics](https://7analytics.ai), where I am CTO. It takes terrain, rivers, and water (rainfall, or a hydrograph) and calculates how that water moves across the floodplain. The output is a map of maximum depth. Extent is whatever is wet.
-
-That is not a new physical idea. Two-dimensional shallow-water models have been the serious way to do this for years. The change is practical. A GPU can do the same hydraulic calculation across millions of cells at once, which makes an ensemble cheap enough to run while the question is still live.
+That physics is not new. Two-dimensional shallow-water models have been the serious way to do this for years. What changed is practical: a GPU can run the same hydraulic calculation across millions of cells at once, which makes an ensemble cheap enough to inspect while the question is still live.
 
 ![Illustrative Tiamat maximum-depth map for a 1-in-100-year fluvial run on the Greenbrier, West Virginia, 10 m grid](/images/articles/tiamat/greenbrier-depth-map.png)
 
-That Greenbrier map is a production run, not a pretty render. Ten-metre grid. Depth in metres. It is also not the historic flood we used for validation. It is what the engine draws when you give it a design event and let the water go.
+That Greenbrier map is a production run, not a render. Ten-metre grid, depth in metres. It is not the historic flood we used for validation. It is what the engine draws when you give it a design event and let the water go.
 
-## Fast enough to ask a second question
+## Speed, with the limit attached
 
-On a single RTX 5090, a 9-million-cell production run finishes the hydraulic solve in about three minutes. The largest 18-million-cell runs we measured took under ten. Those times are the solve, not the whole job of building the model. They are also not a bake-off against TUFLOW or Flood Modeller. They are what Tiamat actually did, on hardware we own, on grids we published.
+On a single RTX 5090, a 9-million-cell production run finishes the hydraulic solve in about three minutes. The largest 18-million-cell runs we measured took under ten. Those times are the solve, not the whole job of building the model, and they are not a bake-off against TUFLOW or Flood Modeller. They are what Tiamat did, on hardware we own, on grids we published.
 
 ![Measured GPU solve time against model grid size for 23 production runs](/images/articles/tiamat/gpu-performance.png)
 
-A fast model is not useful if you cannot see what went in. One map gives you an answer. An ensemble shows which assumptions control that answer. That is the point of the speed. Not a demo. A second run, and a third, while the question is still the question.
+A single map gives an answer. An ensemble shows which assumptions control that answer. That is the point of the speed: a second run, and a third, cheap enough that you can still change the question.
 
-Tiamat also keeps channels that are narrower than the grid. A river can carry a lot of water before it spills. Flatten that channel into the terrain and the model floods too much land, too early. Sub-grid channels are how a 10-metre grid still knows there is a river in it.
+Tiamat also keeps channels that are narrower than the grid. A river can carry a lot of water before it spills. Flatten that channel into the terrain and the model floods too much land, too early. Sub-grid channels are how a 10-metre grid still represents in-channel capacity.
 
-## Checked against real floods
+## What the hydraulic engine has been checked against
 
-We have compared the hydraulic engine with observed US floods, not just synthetic tests. Four sites, three kinds of landscape.
+We have compared the engine with observed US floods, not only synthetic tests. Four sites, three kinds of landscape.
 
 ![Map of Tiamat historic-validation sites in the United States](/images/articles/tiamat/validation-map.png)
 
-On the Greenbrier in West Virginia the water-level error against 38 surveyed high-water marks was about 25 centimetres. The modelled footprint overlaps the observed flood at roughly 0.75 to 0.85, where 1 is a perfect match. A held-out test on the Little Sioux in Iowa sat around 40 centimetres. Other extent checks in Vermont and North Carolina sit in the same honest range.
+On the Greenbrier in West Virginia the water-level error against 38 surveyed high-water marks was about 25 centimetres. The modelled footprint overlaps the observed flood at roughly 0.75 to 0.85, where 1 is a perfect match. A held-out test on the Little Sioux in Iowa sat around 40 centimetres. Extent checks in Vermont and North Carolina sit in the same range.
 
 ![Charts of Tiamat water-level error and inundation-extent overlap against observed floods](/images/articles/tiamat/historic-validation.png)
 
-Those numbers test the engine that spreads water. They do not prove that every rainfall dataset and every runoff assumption will reproduce every real flood. Tiamat's own testing found that distinction directly: the hydraulics are further ahead than the complete rain-to-flood chain. That work continues. I would rather say so than hide it under a pretty map.
+Those numbers test the engine that spreads water. They do not prove that every rainfall dataset and every runoff assumption will reproduce every real flood. Tiamat's own testing found that distinction: the hydraulics are further ahead than the complete rain-to-flood chain. That work continues.
 
-The metrics above use different truth sets and masks. They are evidence coverage, not a league table.
+The metrics use different truth sets and masks. They are evidence coverage, not a league table.
 
 ## What it is for
 
-Tiamat is not a website you log into. It is the machinery under 7Analytics: hazard maps, scenario ensembles, and physically consistent examples for AI to learn from. Physics first. AI on top of a structure it did not have to invent.
+Tiamat is not a website you log into. It is the machinery under 7Analytics: hazard maps, scenario ensembles, and physically consistent examples for models to learn from. Physics first. The customer still sees a depth, a chance, a building. Tiamat is how we can test more places, more storms and more assumptions without hiding where the uncertainty came from.
 
-The customer still sees flood intelligence: a depth, a chance, a building. Tiamat is how we can test more places, more storms and more assumptions without hiding where the uncertainty came from.
-
-The hydrograph that feeds it is the other half of the problem. That is [CEFA](/articles/the-flood-is-a-shape). What the two of them make, once Tiamat forecasts are running on the same storms, is a [probability](/articles/the-probabilistic-flood).
+The hydrograph that feeds it is the other half of the problem. That is [CEFA](/articles/the-flood-is-a-shape). Once Tiamat forecasts are running on the same storms, the two together are a [probability](/articles/the-probabilistic-flood).
