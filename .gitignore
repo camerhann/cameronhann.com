@@ -2,6 +2,7 @@
 dist/
 .next/
 .open-next/
+*.tsbuildinfo
 # generated types
 .astro/
 
