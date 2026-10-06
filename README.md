@@ -1,10 +1,11 @@
 # cameronhann.com
 
-Personal site. Spotlight template. Writing on the work, and other things.
+Chris Cameron-Hann's personal site: essays on flood hydrology and forecasting, his CV, his X feed, and links to Aegaea, 7Analytics, Hydrometric, and the live forecast at forecast.cameronhann.com. Next.js (App Router) + MDX + Tailwind CSS, hosted on Cloudflare Workers via OpenNext.
 
 ```
 npm install
-npm run dev
+npm run dev        # local dev
+npm run build      # production build
 npx wrangler deploy
 ```
 

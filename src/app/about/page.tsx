@@ -92,17 +92,12 @@ export default function About() {
           </div>
           <div className="lg:order-first lg:row-span-2">
             <h1 className="text-4xl font-bold tracking-tight text-zinc-800 sm:text-5xl dark:text-zinc-100">
-              I’m Chris Cameron-Hann.
+              The long version.
             </h1>
             <p className="mt-4 text-lg text-zinc-600 dark:text-zinc-400">
               {person.tagline}
             </p>
             <div className="mt-6 space-y-7 text-base text-zinc-600 dark:text-zinc-400">
-              <p>
-                Flood risk is sold as a map. It isn’t. It is a claim about how
-                water moves, a system that has to run, and a team that will
-                still be there when someone asks: are you sure?
-              </p>
               <p>
                 I founded Aegaea in 2012 and I am CTO there. I am also CTO at
                 7Analytics, building flood data for insurers at building scale.
