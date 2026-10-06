@@ -33,3 +33,6 @@ spotlight.zip
 .dev.vars*
 !.dev.vars.example
 !.env.example
+
+# evidence from npm run verify
+.verify/
