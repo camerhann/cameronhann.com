@@ -659,7 +659,19 @@ async function main() {
             waitUntil: 'domcontentloaded',
             timeout: 30000,
           })
-          await page.waitForTimeout(1500)
+          await page.waitForTimeout(1000)
+          if (pageInfo.path === '/') {
+            // The X timeline replaces "Loading posts…" after the widget
+            // responds, or after its own five-second fallback. Wait for
+            // that settled state, then continue either way.
+            await page
+              .waitForFunction(
+                () => !document.body.innerText.includes('Loading posts'),
+                null,
+                { timeout: 8000 },
+              )
+              .catch(() => {})
+          }
           const fileName = `${pageInfo.name}-${width.name}.png`
           const filePath = path.join(screenshotDir, fileName)
           await page.screenshot({ path: filePath, fullPage: true })
